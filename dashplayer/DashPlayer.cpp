@@ -422,9 +422,6 @@ void DashPlayer::onMessageReceived(const sp<AMessage> &msg) {
               mSource->start();
             }
 
-            // for qualcomm statistics profiling
-            mStats = new DashPlayerStats();
-
 #ifdef QCOM_WFD_SINK
             if (mSourceType == kWfdSource) {
                 DP_MSG_LOW("creating WFDRenderer in NU player");
@@ -440,10 +437,11 @@ void DashPlayer::onMessageReceived(const sp<AMessage> &msg) {
 #ifdef QCOM_WFD_SINK
             }
 #endif /* QCOM_WFD_SINK */
-               // for qualcomm statistics profiling
-                mStats = new DashPlayerStats();
-                mRenderer->registerStats(mStats);
-                looper()->registerHandler(mRenderer);
+
+            // for qualcomm statistics profiling
+            mStats = new DashPlayerStats();
+            mRenderer->registerStats(mStats);
+            looper()->registerHandler(mRenderer);
 
             postScanSources();
             break;
@@ -460,6 +458,15 @@ void DashPlayer::onMessageReceived(const sp<AMessage> &msg) {
                 }
 
                 mScanSourcesPending = false;
+
+                //Exit scanSources if source was destroyed
+                //Later after source gets recreated and started (setDataSource() and start()) scanSources is posted again
+                if (mSource == NULL)
+                {
+                  DP_MSG_ERROR("Source is null. Exit scanSources\n");
+                  break;
+                }
+
                 if (mSourceType == kHttpDashSource) {
                     DP_MSG_LOW("scanning sources haveAudio=%d, haveVideo=%d haveText=%d",
                          mAudioDecoder != NULL, mVideoDecoder != NULL, mTextDecoder!= NULL);

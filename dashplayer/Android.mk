@@ -28,7 +28,7 @@ LOCAL_SHARED_LIBRARIES :=       \
     libui                       \
 
 LOCAL_C_INCLUDES := \
-        $(TOP)/frameworks/av/media/libstagefright/timedtext           \
+    $(TOP)/frameworks/av/media/libstagefright/timedtext           \
 	$(TOP)/frameworks/native/include/media/hardware               \
 	$(TOP)/frameworks/native/include/media/openmax                \
 	$(TOP)/frameworks/av/media/libstagefright/httplive            \
@@ -37,8 +37,8 @@ LOCAL_C_INCLUDES := \
 	$(TOP)/frameworks/av/media/libstagefright/include             \
 	$(TOP)/frameworks/av/media/libstagefright/mpeg2ts             \
 	$(TOP)/frameworks/av/media/libstagefright/rtsp                \
-	$(TOP)/hardware/qcom/media/mm-core/inc                        \
-	$(TOP)/hardware/qcom/display/libgralloc                       \
+	$(call project-path-for,qcom-media)/mm-core/inc                        \
+	$(call project-path-for,qcom-display)/libgralloc                       \
 	$(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 
 ifeq ($(PLATFORM_SDK_VERSION), 18)
